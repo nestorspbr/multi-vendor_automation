@@ -13,6 +13,8 @@
 
 
 ## DEMO VM (FYRE)
+
+vMEM: 12GB vCPU: 4
 - Ubuntu 22.04.5 LTS
 - Docker version 28.0.0, build f9ced58
 - docker-compose version 1.29.2
