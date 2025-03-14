@@ -1,0 +1,58 @@
+# lab for testing multi vendor config using JSON-RPC
+name: multi-vendor-clos
+prefix: ""
+
+topology:
+  kinds:
+    nokia_srlinux:
+      image: ghcr.io/nokia/srlinux
+    linux:
+      image: ghcr.io/hellt/network-multitool
+    arista_ceos:
+      image: ceos:4.32.4M
+  nodes:
+    leaf1:
+      kind: nokia_srlinux
+      type: ixrd2l
+      ports:
+        - 1161:161/udp
+        - 8081:80/tcp
+    leaf2:
+      kind: nokia_srlinux
+      type: ixrd2l
+      ports:
+        - 2161:161/udp
+        - 8082:80/tcp
+    leaf3:
+      kind: arista_ceos
+      ports:
+        - 3161:161/udp
+        - 8443:443/tcp
+    spine1:
+      kind: nokia_srlinux
+      type: ixrd3l
+      ports:
+        - 4161:161/udp
+        - 8084:80/tcp
+    spine2:
+      kind: arista_ceos
+      ports:
+        - 5161:161/udp
+        - 9443:443/tcp
+    client1:
+      kind: linux
+    client2:
+      kind: linux
+    client3:
+      kind: linux
+
+  links:
+    - endpoints: ["leaf1:e1-1", "spine1:e1-1"]
+    - endpoints: ["leaf2:e1-1", "spine1:e1-2"]
+    - endpoints: ["leaf3:eth1", "spine1:e1-3"]
+    - endpoints: ["leaf1:e1-2", "spine2:eth1"]
+    - endpoints: ["leaf2:e1-2", "spine2:eth2"]
+    - endpoints: ["leaf3:eth2", "spine2:eth3"]
+    - endpoints: ["client1:eth1", "leaf1:e1-3"]
+    - endpoints: ["client2:eth1", "leaf2:e1-3"]
+    - endpoints: ["client3:eth1", "leaf3:eth3"]
